@@ -50,7 +50,7 @@ export default function DragDropZone({
         className={`relative border-2 border-dashed rounded-xl p-12 text-center transition-all duration-200 ease-in-out cursor-pointer
           ${isDragging 
             ? "border-cyan-500 bg-cyan-400/10 scale-[1.02]" 
-            : "border-zinc-400 bg-zinc-100 hover:border-zinc-300 hover:bg-zinc-200/60 active:scale-98"
+            : "border-zinc-300 bg-white hover:border-zinc-200 hover:bg-zinc-100/60 active:scale-98"
           }
           ${disabled ? "opacity-50 pointer-events-none" : ""}
         `}
@@ -75,10 +75,11 @@ export default function DragDropZone({
             <p className="text-zinc-400 text-sm">{(file.size / (1024 * 1024)).toFixed(2)} MB</p>
           </div>
         ) : (
-          <div className="space-y-2">
-            <div className="text-zinc-400 text-4xl mb-4">📁</div>
-            <p className="font-medium text-lg">Drag & Drop your MP4 here</p>
-            <p className="text-zinc-400 text-sm">or click to browse</p>
+          <div>
+            <div className="text-4xl mb-4">📁</div>
+            <p className="font-medium text-lg text-cyan-500">Drag & Drop your MP4 here</p>
+            <p className="text-zinc-400 text-md">or click to browse</p>
+            <p className="text-zinc-400 text-sm mt-4">*also supports MOV</p>
           </div>
         )}
       </div>
