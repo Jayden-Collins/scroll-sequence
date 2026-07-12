@@ -50,7 +50,7 @@ export default function DragDropZone({
         className={`relative border-2 border-dashed rounded-xl p-12 text-center transition-all duration-200 ease-in-out cursor-pointer
           ${isDragging 
             ? "border-cyan-500 bg-cyan-400/10 scale-[1.02]" 
-            : "border-zinc-300 bg-white hover:border-zinc-200 hover:bg-zinc-100/60 active:scale-98"
+            : "border-zinc-300 bg-white hover:bg-zinc-200/60 hover:scale-[1.02] active:scale-100"
           }
           ${disabled ? "opacity-50 pointer-events-none" : ""}
         `}

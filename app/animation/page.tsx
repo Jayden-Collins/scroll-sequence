@@ -7,7 +7,6 @@ import { fetchFile, toBlobURL } from "@ffmpeg/util";
 import { getReactUsageSnippet, getTsxComponentCode } from "../../lib/utils";
 import JSZip from "jszip";
 import { saveAs } from "file-saver"
-import Image from "next/image";
 import XLogo from "@/components/XLogo";
 import GithubLogo from "@/components/GithubLogo";
 
@@ -239,13 +238,13 @@ export default function ScrollSequenceGenerator() {
   };
 
   return (
-    <main className="flex flex-col items-center min-h-dvh justify-center px-4 pb-8 bg-zinc-50 font-sans text-black">
+    <main className="flex flex-col items-center min-h-dvh justify-center px-4 pb-8 bg-zinc-100 font-sans text-black">
       {/* Hero Section */}
       <section className="flex flex-col gap-25 pt-50 items-center justify-center min-h-dvh max-w-6xl">
         {/* Tagline */}
         <section className="flex flex-col gap-8 items-center justify-center max-w-6xl">
           <h1 className="font-black text-6xl text-center leading-18">Turn any MP4 into a <br/><span className="font-serif italic font-medium text-cyan-500 tracking-tight">Scroll Sequence</span></h1>
-          <p className="text-zinc-500 font-semibold">Upload video. Extract Frames. Download code.</p>
+          <p className="text-zinc-500 text-center font-semibold">Upload video. Extract Frames. Download code.</p>
 
           <button
             onClick={() => document.getElementById("generator")?.scrollIntoView({ behavior: "smooth" })}
@@ -297,7 +296,7 @@ export default function ScrollSequenceGenerator() {
             )}
           </section>
         ) : (
-          <section className="flex flex-col w-full gap-3 mt-20 items-center justify-center">
+          <section className="flex flex-col w-full mt-20 items-center justify-center">
             <h1 className="font-black text-6xl text-center leading-tight">Animation <span className="font-serif italic font-medium text-cyan-500">Preview</span></h1>        
             <p className="text-zinc-500 font-semibold">Scroll down to preview your animation.</p>
 
@@ -339,19 +338,73 @@ export default function ScrollSequenceGenerator() {
                 disabled={isExporting}
                 className="px-8 py-3 bg-black text-white font-bold text-lg rounded-full hover:bg-black/85 hover:cursor-pointer transition-all active:scale-98"
               >
-                {isExporting ? "Packaging ZIP..." : "Export to ZIP"}
+                {isExporting ? "Packaging ZIP..." : "Download ZIP"}
               </button>
             </div>
 
+            {/* Code Usage Snippet */}
+            <div className="flex flex-col gap-3 pb-8 items-center justify-center">
+              <h1 className="font-black text-6xl text-center leading-18 text-black">Component <span className="font-serif italic font-medium text-cyan-500 tracking-tight">Usage</span></h1>
+              
+              <p className="w-full">1. Download and extract the zip file.</p>
+
+              <p className="w-full">2. Copy the images in  <code
+                  className="bg-white px-1 py-0.5 mx-0.5 rounded border border-zinc-200 text-zinc-500 font-mono text-xs"
+                >
+                  /public/images
+                </code> to the <code
+                  className="bg-white px-1 py-0.5 mx-0.5 rounded border border-zinc-200 text-zinc-500 font-mono text-xs"
+                >
+                  /public/images
+                </code> folder of your project. 
+              </p>
+
+              <p className="w-full">3. Copy the <code
+                  className="bg-white px-1 py-0.5 mx-0.5 rounded border border-zinc-200 text-zinc-500 font-mono text-xs"
+                >
+                  ScrollAnimation.jsx
+                </code> component into your project.
+              </p>
+
+              <p className="w-full">4. Import and render the <code
+                  className="bg-white px-1 py-0.5 mx-0.5 rounded border border-zinc-200 text-zinc-500 font-mono text-xs"
+                >
+                  ScrollAnimation.jsx
+                </code> component on your page.
+              </p>
+              <pre className="text-xs w-full font-mono text-gray-600 p-4 bg-white border border-gray-200 rounded-lg overflow-x-auto">
+                {getReactUsageSnippet(frameUrls.length)}
+              </pre>
+            </div>
           </section>
         )}
 
         {/* Footer */}
         <div className="flex w-full flex-row px-8 gap-2 items-center justify-between">
-          <p className="text-gray-400">Built with ❤️ by <span className="text-zinc-500 font-semibold hover:text-black hover:cursor-pointer">Jayden</span></p>
+          <p className="text-gray-400">Built with ❤️ by <span className="text-zinc-500 font-semibold hover:text-black hover:cursor-pointer">
+            <a
+              href="https://github.com/Jayden-Collins"
+              target="_blank" // Open in new tab
+              rel="noopener noreferrer"
+            >
+              Jayden
+            </a>
+          </span></p>
           <div className="flex flex-row gap-2 items-center justify-center">
-            <GithubLogo className="w-6 text-gray-400 hover:text-black hover:cursor-pointer transition-colors" />
-            <XLogo className="w-5 text-gray-400 hover:text-black hover:cursor-pointer transition-colors" />
+            <a
+              href="https://github.com/Jayden-Collins"
+              target="_blank" // Open in new tab
+              rel="noopener noreferrer"
+            >
+              <GithubLogo className="w-6 text-gray-400 hover:text-black hover:cursor-pointer transition-colors" />
+            </a>
+            <a
+              href="https://x.com/JaydenxBuilds"
+              target="_blank" // Open in new tab
+              rel="noopener noreferrer"
+            >
+              <XLogo className="w-5 text-gray-400 hover:text-black hover:cursor-pointer transition-colors" />
+            </a>
           </div>
         </div>
       </section>
