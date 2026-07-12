@@ -9,6 +9,7 @@ import JSZip from "jszip";
 import { saveAs } from "file-saver"
 import XLogo from "@/components/XLogo";
 import GithubLogo from "@/components/GithubLogo";
+import posthog from "posthog-js";
 
 export default function ScrollSequenceGenerator() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -66,8 +67,15 @@ export default function ScrollSequenceGenerator() {
     // Only accept MP4s or MOVs
     if (selectedFile.type === "video/mp4" || selectedFile.type === "video/quicktime") {
       setFile(selectedFile);
+      posthog.capture("video_uploaded", {
+        file_type: selectedFile.type,
+        file_size_mb: parseFloat((selectedFile.size / (1024 * 1024)).toFixed(2)),
+      });
     } else {
       console.error("Invalid file type. Please upload an MP4 or MOV.");
+      posthog.capture("invalid_file_uploaded", {
+        file_type: selectedFile.type,
+      });
     }
 
     setIsProcessing(false)
@@ -113,12 +121,21 @@ export default function ScrollSequenceGenerator() {
       }
 
       console.log(`Successfully generated ${frameUrls.length} frame URLs.`);
-      
+
       console.log(`Received ${frameUrls.length} frames from WebAssembly`)
       setFrameUrls(frameUrls)
-      
+      posthog.capture("sequence_generated", {
+        frame_count: frameUrls.length,
+        file_name: file.name,
+        file_size_mb: parseFloat((file.size / (1024 * 1024)).toFixed(2)),
+      });
+
     } catch (error) {
       console.error("Error during extraction:", error);
+      posthog.captureException(error);
+      posthog.capture("sequence_generation_failed", {
+        file_name: file?.name,
+      });
     } finally {
       setIsProcessing(false);
     }
@@ -229,9 +246,16 @@ export default function ScrollSequenceGenerator() {
       
       console.log("Triggering download...");
       saveAs(zipBlob, "scroll-sequence-animation.zip");
+      posthog.capture("zip_downloaded", {
+        frame_count: frameUrls.length,
+      });
 
     } catch (error) {
       console.error("Error creating ZIP:", error);
+      posthog.captureException(error);
+      posthog.capture("zip_download_failed", {
+        frame_count: frameUrls.length,
+      });
     } finally {
       setIsExporting(false);
     }
@@ -247,7 +271,10 @@ export default function ScrollSequenceGenerator() {
           <p className="text-zinc-500 text-center font-semibold">Upload video. Extract Frames. Download code.</p>
 
           <button
-            onClick={() => document.getElementById("generator")?.scrollIntoView({ behavior: "smooth" })}
+            onClick={() => {
+              document.getElementById("generator")?.scrollIntoView({ behavior: "smooth" });
+              posthog.capture("cta_clicked");
+            }}
             className="bg-black rounded-full px-8 py-4 text-white font-bold text-lg hover:bg-black/85 hover:cursor-pointer"
           >
             Try Now
@@ -323,6 +350,9 @@ export default function ScrollSequenceGenerator() {
               {/* Reset Button */}
               <button
                 onClick={() => {
+                  posthog.capture("video_reset", {
+                    frame_count: frameUrls.length,
+                  });
                   setFrameUrls([])
                   setFile(null)
                   setProgress(0)
