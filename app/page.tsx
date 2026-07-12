@@ -1,14 +1,15 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import DragDropZone from "../../components/DragDropZone";
+import DragDropZone from "../components/DragDropZone";
 import { FFmpeg } from "@ffmpeg/ffmpeg";
 import { fetchFile, toBlobURL } from "@ffmpeg/util";
-import { getReactUsageSnippet, getTsxComponentCode } from "../../lib/utils";
+import { getReactUsageSnippet, getTsxComponentCode } from "../lib/utils";
 import JSZip from "jszip";
 import { saveAs } from "file-saver"
 import XLogo from "@/components/XLogo";
 import GithubLogo from "@/components/GithubLogo";
+import posthog from "posthog-js";
 
 export default function ScrollSequenceGenerator() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -66,8 +67,15 @@ export default function ScrollSequenceGenerator() {
     // Only accept MP4s or MOVs
     if (selectedFile.type === "video/mp4" || selectedFile.type === "video/quicktime") {
       setFile(selectedFile);
+      posthog.capture("video_uploaded", {
+        file_type: selectedFile.type,
+        file_size_mb: parseFloat((selectedFile.size / (1024 * 1024)).toFixed(2))
+      })
     } else {
       console.error("Invalid file type. Please upload an MP4 or MOV.");
+      posthog.capture("invalid_upload", {
+        file_type: selectedFile.type,
+      })
     }
 
     setIsProcessing(false)
@@ -116,9 +124,18 @@ export default function ScrollSequenceGenerator() {
       
       console.log(`Received ${frameUrls.length} frames from WebAssembly`)
       setFrameUrls(frameUrls)
-      
+
+      posthog.capture("sequence_generated", {
+        frame_count: frameUrls.length,
+        file_name: file.name,
+        file_size_mb: parseFloat((file.size / (1024 * 1024)).toFixed(2))
+      })     
     } catch (error) {
       console.error("Error during extraction:", error);
+      posthog.captureException(error)
+      posthog.capture("sequence_gen_failed", {
+        file_name: file.name
+      })
     } finally {
       setIsProcessing(false);
     }
@@ -230,8 +247,16 @@ export default function ScrollSequenceGenerator() {
       console.log("Triggering download...");
       saveAs(zipBlob, "scroll-sequence-animation.zip");
 
+      posthog.capture("zip_downloaded", {
+        frame_count: frameUrls.length
+      })
+
     } catch (error) {
       console.error("Error creating ZIP:", error);
+      posthog.captureException(error)
+      posthog.capture("zip_failed", {
+        frame_count: frameUrls.length
+      })
     } finally {
       setIsExporting(false);
     }
@@ -388,8 +413,8 @@ export default function ScrollSequenceGenerator() {
               rel="noopener noreferrer"
             >
               Jayden
-            </a>
-          </span></p>
+            </a></span>
+          </p>
           <div className="flex flex-row gap-2 items-center justify-center">
             <a
               href="https://github.com/Jayden-Collins"
