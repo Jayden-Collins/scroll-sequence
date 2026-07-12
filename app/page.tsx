@@ -10,6 +10,7 @@ import { saveAs } from "file-saver"
 import XLogo from "@/components/XLogo";
 import GithubLogo from "@/components/GithubLogo";
 import posthog from "posthog-js";
+import CoffeeLogo from "@/components/CoffeeLogo";
 
 export default function ScrollSequenceGenerator() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -429,6 +430,13 @@ export default function ScrollSequenceGenerator() {
               rel="noopener noreferrer"
             >
               <XLogo className="w-5 text-gray-400 hover:text-black hover:cursor-pointer transition-colors" />
+            </a>
+            <a
+              href="https://buymeacoffee.com/jaydennx"
+              target="_blank" // Open in new tab
+              rel="noopener noreferrer"
+            >
+              <CoffeeLogo className="w-24 text-gray-400 hover:text-black hover:cursor-pointer transition-colors" />
             </a>
           </div>
         </div>
