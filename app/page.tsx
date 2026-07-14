@@ -266,9 +266,9 @@ export default function ScrollSequenceGenerator() {
   return (
     <main className="flex flex-col items-center min-h-dvh justify-center px-4 pb-8 bg-zinc-100 font-sans text-black">
       {/* Hero Section */}
-      <section className="flex flex-col gap-25 pt-50 items-center justify-center min-h-dvh max-w-6xl">
+      <section className="flex flex-col gap-25 pt-50 items-center justify-center min-h-dvh max-w-7xl">
         {/* Tagline */}
-        <section className="flex flex-col gap-8 items-center justify-center max-w-6xl">
+        <section className="flex flex-col gap-8 items-center justify-center max-w-7xl">
           <h1 className="font-black text-6xl text-center leading-18">Turn any MP4 into a <br/><span className="font-serif italic font-medium text-cyan-500 tracking-tight">Scroll Sequence</span></h1>
           <p className="text-zinc-500 text-center font-semibold">Upload video. Extract Frames. Download code.</p>
 
@@ -281,7 +281,7 @@ export default function ScrollSequenceGenerator() {
         </section>
 
         {/* Features */}
-        <section className="flex flex-col md:flex-row gap-8 px-8 md:px-16 max-w-6xl">
+        <section className="flex flex-col md:flex-row gap-8 px-8 md:px-16 max-w-7xl">
           <div className="bg-white shadow-md rounded-2xl p-12 border border-gray-200">
             <h2 className="text-4xl font-serif italic font-medium text-cyan-500 mb-3">Free & Private</h2>
             <p className="text-zinc-500">Powered by WebAssembly. Your video never leaves your browser.  Lightning fast and completely private.</p>
@@ -295,10 +295,10 @@ export default function ScrollSequenceGenerator() {
       </section>
 
       {/* Show Upload or Scroll Sequence Preview */}
-      <section id="generator" className="flex w-full max-w-6xl flex-col min-h-dvh items-center justify-between pt-4">
+      <section id="generator" className="flex w-full max-w-7xl flex-col min-h-dvh items-center justify-between pt-4">
         {frameUrls.length === 0 ? (
           <section className="flex flex-col gap-8 mt-20 items-center justify-center">
-            <h1 className="font-black text-6xl text-center leading-tight">Scroll Sequence <br/><span className="font-serif italic font-medium text-cyan-500">Generator</span></h1>
+            <h1 className="font-black text-6xl text-center leading-18">Scroll Sequence<br/><span className="font-serif italic font-medium text-cyan-500 tracking-tight">Generator</span></h1>
 
             {/* Upload File */}
             <DragDropZone
